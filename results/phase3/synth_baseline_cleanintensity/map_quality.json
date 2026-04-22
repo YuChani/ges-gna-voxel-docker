@@ -1,0 +1,24 @@
+{
+  "trajectory_xy_error_mean": 0.38826659909767897,
+  "trajectory_xy_error_max": 1.086616190989795,
+  "wall_thickness_proxy": {
+    "front_wall": {
+      "count": 47744,
+      "mean_abs": 0.026698836302292542,
+      "std": 0.03359431349829289,
+      "max_abs": 0.09415094068844354
+    },
+    "side_wall": {
+      "count": 12080,
+      "mean_abs": 0.29449048641662817,
+      "std": 0.15293207576155662,
+      "max_abs": 0.5900431409929023
+    },
+    "floor": {
+      "count": 78281,
+      "mean_abs": 0.0,
+      "std": 0.0,
+      "max_abs": 0.0
+    }
+  }
+}

@@ -1,0 +1,250 @@
+[
+    {
+        "Id": "0c6aefd4107ec86d107cdef0c202bc100cf274d182741d9aa54d976a8f064cbc",
+        "Created": "2026-04-21T14:12:24.907116846Z",
+        "Path": "/ros_entrypoint.sh",
+        "Args": [
+            "bash"
+        ],
+        "State": {
+            "Status": "running",
+            "Running": true,
+            "Paused": false,
+            "Restarting": false,
+            "OOMKilled": false,
+            "Dead": false,
+            "Pid": 4108420,
+            "ExitCode": 0,
+            "Error": "",
+            "StartedAt": "2026-04-21T14:12:24.989168372Z",
+            "FinishedAt": "0001-01-01T00:00:00Z"
+        },
+        "Image": "sha256:ba5606000e18dda48390512adc9f17c5d0beafd7dc28c753e0d20b0153ba7061",
+        "ResolvConfPath": "/var/lib/docker/containers/0c6aefd4107ec86d107cdef0c202bc100cf274d182741d9aa54d976a8f064cbc/resolv.conf",
+        "HostnamePath": "/var/lib/docker/containers/0c6aefd4107ec86d107cdef0c202bc100cf274d182741d9aa54d976a8f064cbc/hostname",
+        "HostsPath": "/var/lib/docker/containers/0c6aefd4107ec86d107cdef0c202bc100cf274d182741d9aa54d976a8f064cbc/hosts",
+        "LogPath": "/var/lib/docker/containers/0c6aefd4107ec86d107cdef0c202bc100cf274d182741d9aa54d976a8f064cbc/0c6aefd4107ec86d107cdef0c202bc100cf274d182741d9aa54d976a8f064cbc-json.log",
+        "Name": "/ges-voxel",
+        "RestartCount": 0,
+        "Driver": "overlay2",
+        "Platform": "linux",
+        "MountLabel": "",
+        "ProcessLabel": "",
+        "AppArmorProfile": "unconfined",
+        "ExecIDs": null,
+        "HostConfig": {
+            "Binds": [
+                "/home/chani/personal/dataset:/root/dataset:rw",
+                "/home/chani/personal/CVRL_SLAM_Docker/GES-GND-Voxel-Docker:/root/catkin_ws:rw",
+                "/tmp/.X11-unix:/tmp/.X11-unix:rw",
+                "/dev:/dev:rw"
+            ],
+            "ContainerIDFile": "",
+            "LogConfig": {
+                "Type": "json-file",
+                "Config": {}
+            },
+            "NetworkMode": "host",
+            "PortBindings": {},
+            "RestartPolicy": {
+                "Name": "no",
+                "MaximumRetryCount": 0
+            },
+            "AutoRemove": false,
+            "VolumeDriver": "",
+            "VolumesFrom": null,
+            "ConsoleSize": [
+                0,
+                0
+            ],
+            "CapAdd": null,
+            "CapDrop": null,
+            "CgroupnsMode": "private",
+            "Dns": null,
+            "DnsOptions": null,
+            "DnsSearch": null,
+            "ExtraHosts": [],
+            "GroupAdd": null,
+            "IpcMode": "private",
+            "Cgroup": "",
+            "Links": null,
+            "OomScoreAdj": 0,
+            "PidMode": "",
+            "Privileged": true,
+            "PublishAllPorts": false,
+            "ReadonlyRootfs": false,
+            "SecurityOpt": [
+                "label=disable"
+            ],
+            "UTSMode": "",
+            "UsernsMode": "",
+            "ShmSize": 67108864,
+            "Runtime": "nvidia",
+            "Isolation": "",
+            "CpuShares": 0,
+            "Memory": 0,
+            "NanoCpus": 0,
+            "CgroupParent": "",
+            "BlkioWeight": 0,
+            "BlkioWeightDevice": null,
+            "BlkioDeviceReadBps": null,
+            "BlkioDeviceWriteBps": null,
+            "BlkioDeviceReadIOps": null,
+            "BlkioDeviceWriteIOps": null,
+            "CpuPeriod": 0,
+            "CpuQuota": 0,
+            "CpuRealtimePeriod": 0,
+            "CpuRealtimeRuntime": 0,
+            "CpusetCpus": "",
+            "CpusetMems": "",
+            "Devices": null,
+            "DeviceCgroupRules": null,
+            "DeviceRequests": null,
+            "MemoryReservation": 0,
+            "MemorySwap": 0,
+            "MemorySwappiness": null,
+            "OomKillDisable": null,
+            "PidsLimit": null,
+            "Ulimits": null,
+            "CpuCount": 0,
+            "CpuPercent": 0,
+            "IOMaximumIOps": 0,
+            "IOMaximumBandwidth": 0,
+            "MaskedPaths": null,
+            "ReadonlyPaths": null
+        },
+        "GraphDriver": {
+            "Data": {
+                "ID": "0c6aefd4107ec86d107cdef0c202bc100cf274d182741d9aa54d976a8f064cbc",
+                "LowerDir": "/var/lib/docker/overlay2/e07d26a01a256d21eedd8db0a0daca31a52e84a7025b417f59e74c513b8acc05-init/diff:/var/lib/docker/overlay2/p16gxmnip11a9f6bgpcti4zp6/diff:/var/lib/docker/overlay2/qf6ymnqop8c3xlcay6t5pzo15/diff:/var/lib/docker/overlay2/m2b0m3oapr0e0oklsmzgrc6ke/diff:/var/lib/docker/overlay2/l5w04uu8g3ty5whghh6tnlmpi/diff:/var/lib/docker/overlay2/nremfk2lcjyijpl3xy923jfv2/diff:/var/lib/docker/overlay2/i4093gqgansrk6s3xkqoyh5pn/diff:/var/lib/docker/overlay2/q3dblv5fckrg1x149xlz58509/diff:/var/lib/docker/overlay2/3ynu1mncuz169s6khozdpzc2m/diff:/var/lib/docker/overlay2/5jpewv3fcy1whuu78nqhbqozu/diff:/var/lib/docker/overlay2/hwuekc9upq56zm8idkl7vdb5d/diff:/var/lib/docker/overlay2/1g3a7cpiaiyqjg6b5r5hpebp6/diff:/var/lib/docker/overlay2/03byq8sd2vhkvjofvx0v7e6wp/diff:/var/lib/docker/overlay2/q8ve5wr56505pm9u8qq2kh48p/diff:/var/lib/docker/overlay2/lawkbckvdcpc48eu60r1ogd2z/diff:/var/lib/docker/overlay2/n1w80v251lfrt5gr3lme4u2d2/diff:/var/lib/docker/overlay2/3onn5cgwlgjzcma430zr3tmmj/diff:/var/lib/docker/overlay2/29cc96a42c09648dcb562362924e81af7a4258ffad9d1762e9891e020f49c481/diff:/var/lib/docker/overlay2/f462f378357ef207ac35d934385826c1bc10fb1c22504459b880f2601c1c11b0/diff:/var/lib/docker/overlay2/3f10052bc3b81edb1e56b4c55379b1fb422b6bac3d1d0bae7f3895f2d754c805/diff:/var/lib/docker/overlay2/b6742c91b21157f7ca396c5d38c2732adf7a0d942fc28a182b3edecbaaddfc9d/diff:/var/lib/docker/overlay2/6ce6840403b0e3f8947cea8eaef6a067209f1fa7666f81fc241a2f91a0b10fb4/diff:/var/lib/docker/overlay2/2c1952c90c0fc9cefed0cbd4c4e3a3c973e53b696bd3bb418aa3d1ad1d2ce06d/diff:/var/lib/docker/overlay2/2ed333d8d6339b1581f84eea9a5646947aa15fbcba7d2af0b5e7153e918977bd/diff:/var/lib/docker/overlay2/06d353e03333b7d3da0711a88b84cbf7687cee1c788bfea1c471157f5b2093ab/diff:/var/lib/docker/overlay2/05b0f01e45227fe08a0a3810775a27690d04207b1902400a3b94c74fb024c740/diff:/var/lib/docker/overlay2/2edaa70b1f93bbf4b0507d4f4418a1f1ba0e623f5aa3a034a71b35eb578285e6/diff",
+                "MergedDir": "/var/lib/docker/overlay2/e07d26a01a256d21eedd8db0a0daca31a52e84a7025b417f59e74c513b8acc05/merged",
+                "UpperDir": "/var/lib/docker/overlay2/e07d26a01a256d21eedd8db0a0daca31a52e84a7025b417f59e74c513b8acc05/diff",
+                "WorkDir": "/var/lib/docker/overlay2/e07d26a01a256d21eedd8db0a0daca31a52e84a7025b417f59e74c513b8acc05/work"
+            },
+            "Name": "overlay2"
+        },
+        "Mounts": [
+            {
+                "Type": "bind",
+                "Source": "/home/chani/personal/dataset",
+                "Destination": "/root/dataset",
+                "Mode": "rw",
+                "RW": true,
+                "Propagation": "rprivate"
+            },
+            {
+                "Type": "bind",
+                "Source": "/home/chani/personal/CVRL_SLAM_Docker/GES-GND-Voxel-Docker",
+                "Destination": "/root/catkin_ws",
+                "Mode": "rw",
+                "RW": true,
+                "Propagation": "rprivate"
+            },
+            {
+                "Type": "bind",
+                "Source": "/tmp/.X11-unix",
+                "Destination": "/tmp/.X11-unix",
+                "Mode": "rw",
+                "RW": true,
+                "Propagation": "rprivate"
+            },
+            {
+                "Type": "bind",
+                "Source": "/dev",
+                "Destination": "/dev",
+                "Mode": "rw",
+                "RW": true,
+                "Propagation": "rprivate"
+            }
+        ],
+        "Config": {
+            "Hostname": "chani-MS-7D76",
+            "Domainname": "",
+            "User": "",
+            "AttachStdin": false,
+            "AttachStdout": true,
+            "AttachStderr": true,
+            "Tty": true,
+            "OpenStdin": false,
+            "StdinOnce": false,
+            "Env": [
+                "DEBUG=",
+                "DISPLAY=:1",
+                "__NV_PRIME_RENDER_OFFLOAD=1",
+                "ROS_HOSTNAME=127.0.0.1",
+                "NVIDIA_DRIVER_CAPABILITIES=all",
+                "QT_X11_NO_MITSHM=1",
+                "ROS_MASTER_URI=http://127.0.0.1:11311",
+                "__GLX_VENDOR_LIBRARY_NAME=nvidia",
+                "NVIDIA_VISIBLE_DEVICES=all",
+                "PATH=/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin",
+                "LANG=C.UTF-8",
+                "LC_ALL=C.UTF-8",
+                "ROS_DISTRO=noetic"
+            ],
+            "Cmd": [
+                "bash"
+            ],
+            "Image": "kwu-cvrl/ges-voxel:latest",
+            "Volumes": null,
+            "WorkingDir": "/root/catkin_ws/src/FAST_LIO",
+            "Entrypoint": [
+                "/ros_entrypoint.sh"
+            ],
+            "OnBuild": null,
+            "Labels": {
+                "com.docker.compose.config-hash": "c98bed0b30a249a09c0e5157cfcde415d9dc9def821e74f6d4d3f98a5e473633",
+                "com.docker.compose.container-number": "1",
+                "com.docker.compose.depends_on": "",
+                "com.docker.compose.image": "sha256:ba5606000e18dda48390512adc9f17c5d0beafd7dc28c753e0d20b0153ba7061",
+                "com.docker.compose.oneoff": "False",
+                "com.docker.compose.project": "docker-compose",
+                "com.docker.compose.project.config_files": "/home/chani/personal/CVRL_SLAM_Docker/GES-GND-Voxel-Docker/docker-compose/ges-voxel_compose.yml",
+                "com.docker.compose.project.working_dir": "/home/chani/personal/CVRL_SLAM_Docker/GES-GND-Voxel-Docker/docker-compose",
+                "com.docker.compose.replace": "a79a8c9f21f2ee20f027fc3b7f90af96cab12d557a3448cad5186266f5b7c344",
+                "com.docker.compose.service": "ges-voxel",
+                "com.docker.compose.version": "2.29.1",
+                "org.opencontainers.image.ref.name": "ubuntu",
+                "org.opencontainers.image.version": "20.04"
+            }
+        },
+        "NetworkSettings": {
+            "Bridge": "",
+            "SandboxID": "87b26acf278482d46768fc68449744584fac53eaf9dc4f6fe5c936ed51e5ceb2",
+            "SandboxKey": "/var/run/docker/netns/default",
+            "Ports": {},
+            "HairpinMode": false,
+            "LinkLocalIPv6Address": "",
+            "LinkLocalIPv6PrefixLen": 0,
+            "SecondaryIPAddresses": null,
+            "SecondaryIPv6Addresses": null,
+            "EndpointID": "",
+            "Gateway": "",
+            "GlobalIPv6Address": "",
+            "GlobalIPv6PrefixLen": 0,
+            "IPAddress": "",
+            "IPPrefixLen": 0,
+            "IPv6Gateway": "",
+            "MacAddress": "",
+            "Networks": {
+                "host": {
+                    "IPAMConfig": null,
+                    "Links": null,
+                    "Aliases": null,
+                    "MacAddress": "",
+                    "DriverOpts": null,
+                    "GwPriority": 0,
+                    "NetworkID": "4461157ac5ae2cfa49e548613d590c57371198c19117ec4007140c3388502522",
+                    "EndpointID": "58029d8ea93a7350e274a1934c617cd49e683f17249b416607b20ca04afb2551",
+                    "Gateway": "",
+                    "IPAddress": "",
+                    "IPPrefixLen": 0,
+                    "IPv6Gateway": "",
+                    "GlobalIPv6Address": "",
+                    "GlobalIPv6PrefixLen": 0,
+                    "DNSNames": null
+                }
+            }
+        }
+    }
+]

@@ -1,0 +1,86 @@
+[
+    {
+        "Id": "sha256:ba5606000e18dda48390512adc9f17c5d0beafd7dc28c753e0d20b0153ba7061",
+        "RepoTags": [
+            "kwu-cvrl/ges-voxel:latest"
+        ],
+        "RepoDigests": [],
+        "Parent": "",
+        "Comment": "buildkit.dockerfile.v0",
+        "Created": "2026-04-21T14:35:33.934474442+09:00",
+        "DockerVersion": "",
+        "Author": "",
+        "Architecture": "amd64",
+        "Os": "linux",
+        "Size": 4799510658,
+        "GraphDriver": {
+            "Data": {
+                "LowerDir": "/var/lib/docker/overlay2/qf6ymnqop8c3xlcay6t5pzo15/diff:/var/lib/docker/overlay2/m2b0m3oapr0e0oklsmzgrc6ke/diff:/var/lib/docker/overlay2/l5w04uu8g3ty5whghh6tnlmpi/diff:/var/lib/docker/overlay2/nremfk2lcjyijpl3xy923jfv2/diff:/var/lib/docker/overlay2/i4093gqgansrk6s3xkqoyh5pn/diff:/var/lib/docker/overlay2/q3dblv5fckrg1x149xlz58509/diff:/var/lib/docker/overlay2/3ynu1mncuz169s6khozdpzc2m/diff:/var/lib/docker/overlay2/5jpewv3fcy1whuu78nqhbqozu/diff:/var/lib/docker/overlay2/hwuekc9upq56zm8idkl7vdb5d/diff:/var/lib/docker/overlay2/1g3a7cpiaiyqjg6b5r5hpebp6/diff:/var/lib/docker/overlay2/03byq8sd2vhkvjofvx0v7e6wp/diff:/var/lib/docker/overlay2/q8ve5wr56505pm9u8qq2kh48p/diff:/var/lib/docker/overlay2/lawkbckvdcpc48eu60r1ogd2z/diff:/var/lib/docker/overlay2/n1w80v251lfrt5gr3lme4u2d2/diff:/var/lib/docker/overlay2/3onn5cgwlgjzcma430zr3tmmj/diff:/var/lib/docker/overlay2/29cc96a42c09648dcb562362924e81af7a4258ffad9d1762e9891e020f49c481/diff:/var/lib/docker/overlay2/f462f378357ef207ac35d934385826c1bc10fb1c22504459b880f2601c1c11b0/diff:/var/lib/docker/overlay2/3f10052bc3b81edb1e56b4c55379b1fb422b6bac3d1d0bae7f3895f2d754c805/diff:/var/lib/docker/overlay2/b6742c91b21157f7ca396c5d38c2732adf7a0d942fc28a182b3edecbaaddfc9d/diff:/var/lib/docker/overlay2/6ce6840403b0e3f8947cea8eaef6a067209f1fa7666f81fc241a2f91a0b10fb4/diff:/var/lib/docker/overlay2/2c1952c90c0fc9cefed0cbd4c4e3a3c973e53b696bd3bb418aa3d1ad1d2ce06d/diff:/var/lib/docker/overlay2/2ed333d8d6339b1581f84eea9a5646947aa15fbcba7d2af0b5e7153e918977bd/diff:/var/lib/docker/overlay2/06d353e03333b7d3da0711a88b84cbf7687cee1c788bfea1c471157f5b2093ab/diff:/var/lib/docker/overlay2/05b0f01e45227fe08a0a3810775a27690d04207b1902400a3b94c74fb024c740/diff:/var/lib/docker/overlay2/2edaa70b1f93bbf4b0507d4f4418a1f1ba0e623f5aa3a034a71b35eb578285e6/diff",
+                "MergedDir": "/var/lib/docker/overlay2/p16gxmnip11a9f6bgpcti4zp6/merged",
+                "UpperDir": "/var/lib/docker/overlay2/p16gxmnip11a9f6bgpcti4zp6/diff",
+                "WorkDir": "/var/lib/docker/overlay2/p16gxmnip11a9f6bgpcti4zp6/work"
+            },
+            "Name": "overlay2"
+        },
+        "RootFS": {
+            "Type": "layers",
+            "Layers": [
+                "sha256:470b66ea5123c93b0d5606e4213bf9e47d3d426b640d32472e4ac213186c4bb6",
+                "sha256:a889f9143a450f2a6d23fceb13d0e5189af1d2135f795afd4298224b0dbe7724",
+                "sha256:d214fe2343d3df0737d521de7c4d99e5f245e2fe64a02ba803bab2116127afe4",
+                "sha256:f7b4bcdc70dec019f5bd29c27fc3715552bf6f6e79122c69d28cf995f9dbd831",
+                "sha256:c04a204a9461a225d9965e27d7d7e6d3797968b08980315be6e24c525967319d",
+                "sha256:baa390fe1e57c3c3c35ccbfde67565413b7e404d530fe026179f427dc94aacb8",
+                "sha256:9829cd12d25623ddf901ded0b4344f5c90ccb3db1306bc1ad81ec2519349b4c0",
+                "sha256:5d999dce21083b1719b89f9c3b2121e6e9689b01dd027fe53a441c0950f87f83",
+                "sha256:5c7cd8870245cde83009029a52362b41b4f0e32970e811ad7389dbb0f7647dda",
+                "sha256:56865b1d0fd20014eeb0d28cdf4a7b89c39c3f2add2156ef0845ec4317e1ca33",
+                "sha256:1b539a41886e80e07ed45923a99cc25d05d31d7597d55d64839646c6d7304fb5",
+                "sha256:bcbd63693b569120069cb44c6b6d92bce90542194cdbe5b46513645567176b97",
+                "sha256:a0c794fd1bf03f520f5c8404b6d82d19abea1a3c644b1688bbcb0f35c7d9c9e5",
+                "sha256:296b91909a2601f0f40b8e0c318ffd33e772158b5408e73a277c85e277719a17",
+                "sha256:5f70bf18a086007016e948b04aed3b82103a36bea41755b6cddfaf10ace3c6ef",
+                "sha256:6b5d1b7752cfdd19e61c49327392f4a7369e654da78ab5e885e5053e537cfce3",
+                "sha256:5f70bf18a086007016e948b04aed3b82103a36bea41755b6cddfaf10ace3c6ef",
+                "sha256:82f03d0caf4c67bec17e8d7e85690555558d45ee41e2ae400081be4da032465a",
+                "sha256:6d32e934ca822c7c0a7c9efbb5df4843ec1545b1cbf5bfce8d5f1ea871e3d849",
+                "sha256:5f70bf18a086007016e948b04aed3b82103a36bea41755b6cddfaf10ace3c6ef",
+                "sha256:c06f195efbaf31e047e52fbaad55cd730e8a43fb3c42f314e161d270b68515cc",
+                "sha256:b7643f87e1443dd3fb59a938f23cac296717b134fa3fc4b9496a3f805e62603c",
+                "sha256:5f70bf18a086007016e948b04aed3b82103a36bea41755b6cddfaf10ace3c6ef",
+                "sha256:8eb49ac0947793ce645b879cdf093d90ac73e76a856e34e44d0665dd0e0cbd5c",
+                "sha256:15bad282d066a6325c1d52e9c5f9cd699f570d510367262f1bfc891e200d78a4",
+                "sha256:5f70bf18a086007016e948b04aed3b82103a36bea41755b6cddfaf10ace3c6ef"
+            ]
+        },
+        "Metadata": {
+            "LastTagTime": "2026-04-21T14:36:14.357124975+09:00"
+        },
+        "Config": {
+            "ArgsEscaped": true,
+            "Cmd": [
+                "bash"
+            ],
+            "Entrypoint": [
+                "/ros_entrypoint.sh"
+            ],
+            "Env": [
+                "PATH=/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin",
+                "LANG=C.UTF-8",
+                "LC_ALL=C.UTF-8",
+                "ROS_DISTRO=noetic"
+            ],
+            "Labels": {
+                "com.docker.compose.project": "docker-compose",
+                "com.docker.compose.service": "ges-voxel",
+                "com.docker.compose.version": "2.29.1",
+                "org.opencontainers.image.ref.name": "ubuntu",
+                "org.opencontainers.image.version": "20.04"
+            },
+            "OnBuild": null,
+            "User": "",
+            "Volumes": null,
+            "WorkingDir": "/root/catkin_ws/src/FAST_LIO"
+        }
+    }
+]

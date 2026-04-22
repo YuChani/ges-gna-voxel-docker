@@ -1,0 +1,90 @@
+Multi thread started 
+p_pre->lidar_type 1
+~~~~/root/catkin_ws/src/FAST_LIO/ file opened
+[33m[WARN] [1776780903.739343578]: No point, skip this scan!
+[0m
+[33m[WARN] [1776780932.637377901]: No Effective Points! 
+[0m
+[33m[WARN] [1776780932.637426210]: No Effective Points! 
+[0m
+[33m[WARN] [1776780932.637457710]: No Effective Points! 
+[0m
+[33m[WARN] [1776780932.637488630]: No Effective Points! 
+[0m
+[33m[WARN] [1776781005.992298756]: catch sig 2[0m
+[0m[INFO] [1776780903.738628618]: IMU Initial Done[0m
+Rebuild thread terminated normally
+... logging to /root/.ros/log/77389d96-3d8c-11f1-b6ed-345a60078037/roslaunch-chani-MS-7D76-360.log
+Checking log directory for disk usage. This may take a while.
+Press Ctrl-C to interrupt
+Done checking log file disk usage. Usage is <1GB.
+]2;/root/catkin_ws/FAST_LIO/launch/mapping_avia_param.launch
+[1mstarted roslaunch server http://127.0.0.1:33147/[0m
+
+SUMMARY
+========
+
+PARAMETERS
+ * /common/imu_topic: /livox/imu
+ * /common/lid_topic: /livox/lidar
+ * /common/time_offset_lidar_to_imu: 0.0
+ * /common/time_sync_en: False
+ * /cube_side_length: 1000.0
+ * /feature_extract_enable: False
+ * /filter_size_map: 0.5
+ * /filter_size_surf: 0.5
+ * /mapping/acc_cov: 0.1
+ * /mapping/b_acc_cov: 0.0001
+ * /mapping/b_gyr_cov: 0.0001
+ * /mapping/det_range: 450.0
+ * /mapping/extrinsic_R: [1, 0, 0, 0, 1, 0...
+ * /mapping/extrinsic_T: [0.04165, 0.02326...
+ * /mapping/extrinsic_est_en: False
+ * /mapping/fov_degree: 90
+ * /mapping/gyr_cov: 0.1
+ * /mapping/local_refinement_hook_enable: False
+ * /mapping/local_refinement_recent_keyframe_limit: 10
+ * /mapping/local_refinement_translation_step_size: 0.1
+ * /mapping/local_refinement_window_size: 5
+ * /mapping/primitive_acceptance_score_threshold: 0.9
+ * /mapping/primitive_log_csv_path: /root/catkin_ws/r...
+ * /mapping/primitive_log_enable: True
+ * /mapping/primitive_log_stride: 1
+ * /mapping/primitive_lp_normal_scale: 1.0
+ * /mapping/primitive_lp_shape_p: 4.0
+ * /mapping/primitive_lp_tangent_scale: 1.0
+ * /mapping/primitive_lp_tangent_weight: 0.2
+ * /mapping/primitive_max_match_sq: 5.0
+ * /mapping/primitive_min_eigenvalue: 0.0001
+ * /mapping/primitive_min_normal_scale: 0.05
+ * /mapping/primitive_min_tangent_scale: 0.1
+ * /mapping/primitive_min_valid_neighbors: 5
+ * /mapping/primitive_mode: 1
+ * /mapping/primitive_neighbor_count: 5
+ * /mapping/primitive_plane_fit_threshold: 0.1
+ * /max_iteration: 3
+ * /pcd_save/interval: -1
+ * /pcd_save/pcd_save_en: False
+ * /point_filter_num: 3
+ * /preprocess/blind: 4
+ * /preprocess/lidar_type: 1
+ * /preprocess/scan_line: 6
+ * /publish/dense_publish_en: True
+ * /publish/path_en: False
+ * /publish/scan_bodyframe_pub_en: True
+ * /publish/scan_publish_en: True
+ * /rosdistro: noetic
+ * /rosversion: 1.17.4
+ * /runtime_pos_log_enable: False
+
+NODES
+  /
+    laserMapping (fast_lio/fastlio_mapping)
+
+[1mROS_MASTER_URI=http://127.0.0.1:11311[0m
+]2;/root/catkin_ws/FAST_LIO/launch/mapping_avia_param.launch http://127.0.0.1:11311
+[1mprocess[laserMapping-1]: started with pid [374][0m
+[laserMapping-1] killing on exit
+shutting down processing monitor...
+... shutting down processing monitor complete
+[1mdone[0m

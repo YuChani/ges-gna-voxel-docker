@@ -1,0 +1,1 @@
+timestamp,mode,feats_down_size,effective_correspondence_count,residual_mean,residual_std,residual_max,signed_dist_abs_mean,signed_dist_abs_std,signed_dist_abs_max,tangent_lp_mean,tangent_lp_max,planarity_mean,acceptance_ratio,match_time,solve_time,kdtree_search_time,kdtree_incremental_time

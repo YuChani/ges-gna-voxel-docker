@@ -1,0 +1,5 @@
+[Primitive Benchmark] output_csv=/root/catkin_ws/results/phase3/primitive_benchmark.csv
+[Scenario] plane_patch fit_mean_abs_residual plane=0.021264 center=0.509578 surface_lp=0.193153
+[Scenario] edge_patch fit_mean_abs_residual plane=0.025629 center=0.433802 surface_lp=0.214244
+[Scenario] corner_patch fit_mean_abs_residual plane=0.034207 center=0.559602 surface_lp=0.392915
+[Primitive Benchmark] done

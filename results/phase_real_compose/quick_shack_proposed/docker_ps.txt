@@ -1,0 +1,2 @@
+CONTAINER ID                                                       IMAGE                       COMMAND                     CREATED         STATUS         PORTS     NAMES
+0c6aefd4107ec86d107cdef0c202bc100cf274d182741d9aa54d976a8f064cbc   kwu-cvrl/ges-voxel:latest   "/ros_entrypoint.sh bash"   2 minutes ago   Up 2 minutes             ges-voxel

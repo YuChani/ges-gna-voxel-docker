@@ -1,0 +1,66 @@
+Multi thread started 
+p_pre->lidar_type 1
+~~~~/root/catkin_ws/src/FAST_LIO/ file opened
+[33m[WARN] [1776750239.417568428]: catch sig 2[0m
+Rebuild thread terminated normally
+... logging to /root/.ros/log/1127034a-3d45-11f1-b95c-345a60078037/roslaunch-chani-MS-7D76-1841.log
+Checking log directory for disk usage. This may take a while.
+Press Ctrl-C to interrupt
+Done checking log file disk usage. Usage is <1GB.
+]2;/root/catkin_ws/FAST_LIO/launch/mapping_avia.launch
+[1mstarted roslaunch server http://localhost:40001/[0m
+
+SUMMARY
+========
+
+PARAMETERS
+ * /common/imu_topic: /livox/imu
+ * /common/lid_topic: /livox/lidar
+ * /common/time_offset_lidar_to_imu: 0.0
+ * /common/time_sync_en: False
+ * /cube_side_length: 1000.0
+ * /feature_extract_enable: False
+ * /filter_size_map: 0.5
+ * /filter_size_surf: 0.5
+ * /mapping/acc_cov: 0.1
+ * /mapping/b_acc_cov: 0.0001
+ * /mapping/b_gyr_cov: 0.0001
+ * /mapping/det_range: 450.0
+ * /mapping/extrinsic_R: [1, 0, 0, 0, 1, 0...
+ * /mapping/extrinsic_T: [0.04165, 0.02326...
+ * /mapping/extrinsic_est_en: False
+ * /mapping/fov_degree: 90
+ * /mapping/gyr_cov: 0.1
+ * /max_iteration: 3
+ * /pcd_save/interval: -1
+ * /pcd_save/pcd_save_en: True
+ * /point_filter_num: 3
+ * /preprocess/blind: 4
+ * /preprocess/lidar_type: 1
+ * /preprocess/scan_line: 6
+ * /publish/dense_publish_en: True
+ * /publish/path_en: False
+ * /publish/scan_bodyframe_pub_en: True
+ * /publish/scan_publish_en: True
+ * /rosdistro: noetic
+ * /rosversion: 1.17.4
+ * /runtime_pos_log_enable: False
+
+NODES
+  /
+    laserMapping (fast_lio/fastlio_mapping)
+
+auto-starting new master
+[1mprocess[master]: started with pid [1849][0m
+[1mROS_MASTER_URI=http://localhost:11311[0m
+]2;/root/catkin_ws/FAST_LIO/launch/mapping_avia.launch http://localhost:11311
+[1msetting /run_id to 1127034a-3d45-11f1-b95c-345a60078037[0m
+[1mprocess[rosout-1]: started with pid [1859][0m
+started core service [/rosout]
+[1mprocess[laserMapping-2]: started with pid [1866][0m
+[laserMapping-2] killing on exit
+[rosout-1] killing on exit
+[master] killing on exit
+shutting down processing monitor...
+... shutting down processing monitor complete
+[1mdone[0m

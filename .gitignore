@@ -1,0 +1,8 @@
+build/
+devel/
+src/FAST_LIO
+src/CMakeLists.txt
+src/livox_ros_driver/livox_ros_driver/Livox-SDK/build/
+.catkin_workspace
+.codex
+.sisyphus/

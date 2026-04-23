@@ -14,6 +14,7 @@ enum PrimitiveMode
     PLANE_BASELINE = 0,
     SURFACE_LP = 1,
     CENTER_GAUSSIAN = 2,
+    HYBRID_PLANE_SURFACE = 3,
 };
 
 struct PrimitiveResidualConfig
@@ -31,6 +32,12 @@ struct PrimitiveResidualConfig
     double min_eigenvalue = 1e-4;
     double min_normal_scale = 0.05;
     double min_tangent_scale = 0.10;
+    int hybrid_neighbor_count = 8;
+    int hybrid_min_valid_neighbors = 6;
+    double hybrid_min_planarity = 0.85;
+    double hybrid_min_tangent_ratio = 0.10;
+    double hybrid_weight_min = 0.50;
+    double hybrid_weight_max = 1.00;
 };
 
 struct PrimitiveResidualResult
@@ -44,8 +51,15 @@ struct PrimitiveResidualResult
     V3D world_normal = V3D(0.0, 0.0, 1.0);
     double residual = 0.0;
     double signed_distance = 0.0;
+    double gating_signed_distance = 0.0;
+    double plane_residual = 0.0;
+    double ekf_residual = 0.0;
+    double surface_normalized_residual = 0.0;
+    double surface_score = 1.0;
+    double measurement_weight = 1.0;
     double tangent_lp = 0.0;
     double planarity = 0.0;
+    double support_tangent_ratio = 1.0;
     double acceptance_score = 0.0;
 };
 
@@ -64,6 +78,36 @@ inline double SafeSign(const double value)
     if (value > 0.0) return 1.0;
     if (value < 0.0) return -1.0;
     return 0.0;
+}
+
+inline bool IsHybridMode(const int mode)
+{
+    return mode == HYBRID_PLANE_SURFACE;
+}
+
+inline double Clamp01(const double value)
+{
+    return std::max(0.0, std::min(1.0, value));
+}
+
+inline double ClampRange(const double value, const double low, const double high)
+{
+    return std::max(low, std::min(high, value));
+}
+
+inline double BaselineAcceptanceScore(const double raw_signed_distance, const V3D &point_body)
+{
+    const double body_norm = std::sqrt(std::max(point_body.norm(), 1e-6));
+    return 1.0 - 0.9 * std::fabs(raw_signed_distance) / body_norm;
+}
+
+inline double TangentScaleRatio(const V3D &scales)
+{
+    if (!scales.allFinite() || scales(0) <= 1e-9)
+    {
+        return 0.0;
+    }
+    return scales(1) / scales(0);
 }
 
 inline bool ComputeNeighborhoodFrame(const PointVector &points,
@@ -180,12 +224,18 @@ inline bool ComputePlaneResidual(const PointVector &points,
     result.world_normal = V3D(plane(0), plane(1), plane(2));
     result.world_gradient = result.world_normal;
     result.signed_distance = plane(0) * point_world.x + plane(1) * point_world.y + plane(2) * point_world.z + plane(3);
+    result.gating_signed_distance = result.signed_distance;
+    result.plane_residual = result.signed_distance;
+    result.ekf_residual = result.plane_residual;
+    result.surface_normalized_residual = 0.0;
+    result.surface_score = 1.0;
+    result.measurement_weight = 1.0;
     result.residual = result.signed_distance;
     result.tangent_lp = 0.0;
     result.planarity = planarity;
+    result.support_tangent_ratio = TangentScaleRatio(scales);
 
-    const double body_norm = std::sqrt(std::max(point_body.norm(), 1e-6));
-    result.acceptance_score = 1.0 - 0.9 * std::fabs(result.residual) / body_norm;
+    result.acceptance_score = BaselineAcceptanceScore(result.gating_signed_distance, point_body);
     return std::isfinite(result.acceptance_score);
 }
 
@@ -248,12 +298,18 @@ inline bool ComputeSurfaceLpResidual(const PointVector &points,
     result.world_normal = frame.col(2);
     result.world_gradient = normal_grad - tangent_grad;
     result.signed_distance = signed_distance;
+    result.gating_signed_distance = signed_distance;
+    result.plane_residual = signed_distance;
+    result.ekf_residual = residual;
+    result.surface_normalized_residual = residual;
     result.residual = residual;
     result.tangent_lp = tangent_lp;
     result.planarity = planarity;
+    result.support_tangent_ratio = TangentScaleRatio(scales);
 
-    const double body_norm = std::sqrt(std::max(point_body.norm(), 1e-6));
-    result.acceptance_score = 1.0 - 0.9 * std::fabs(result.residual) / body_norm;
+    result.acceptance_score = BaselineAcceptanceScore(result.residual, point_body);
+    result.surface_score = Clamp01(result.acceptance_score);
+    result.measurement_weight = 1.0;
     return result.world_gradient.allFinite() && std::isfinite(result.acceptance_score);
 }
 
@@ -297,13 +353,101 @@ inline bool ComputeCenterGaussianResidual(const PointVector &points,
     result.world_normal = frame.col(2);
     result.world_gradient = frame * local_gradient;
     result.signed_distance = diff.norm();
+    result.gating_signed_distance = result.signed_distance;
+    result.plane_residual = residual;
+    result.ekf_residual = residual;
+    result.surface_normalized_residual = residual;
     result.residual = residual;
     result.tangent_lp = std::sqrt(u * u + v * v);
     result.planarity = planarity;
+    result.support_tangent_ratio = TangentScaleRatio(scales);
 
-    const double body_norm = std::sqrt(std::max(point_body.norm(), 1e-6));
-    result.acceptance_score = 1.0 - 0.9 * std::fabs(result.residual) / body_norm;
+    result.acceptance_score = BaselineAcceptanceScore(result.residual, point_body);
+    result.surface_score = Clamp01(result.acceptance_score);
+    result.measurement_weight = 1.0;
     return result.world_gradient.allFinite() && std::isfinite(result.acceptance_score);
+}
+
+inline bool PassHybridSupportQuality(const PrimitiveResidualConfig &config,
+                                     const PrimitiveResidualResult &surface_result)
+{
+    if (!surface_result.scales.allFinite())
+    {
+        return false;
+    }
+    if (surface_result.planarity < config.hybrid_min_planarity)
+    {
+        return false;
+    }
+    if (surface_result.scales(0) <= 0.0 || surface_result.scales(1) <= 0.0 || surface_result.scales(2) <= 0.0)
+    {
+        return false;
+    }
+    if (surface_result.support_tangent_ratio < config.hybrid_min_tangent_ratio)
+    {
+        return false;
+    }
+    return true;
+}
+
+inline double ComputeHybridSurfaceScore(const PrimitiveResidualConfig &config,
+                                        const PrimitiveResidualResult &surface_result,
+                                        const V3D &point_body)
+{
+    const double residual_score = Clamp01(BaselineAcceptanceScore(surface_result.surface_normalized_residual, point_body));
+    const double planarity_den = std::max(1e-6, 1.0 - config.hybrid_min_planarity);
+    const double planarity_score = Clamp01((surface_result.planarity - config.hybrid_min_planarity) / planarity_den);
+    const double tangent_score = 1.0 / (1.0 + std::max(0.0, config.lp_tangent_weight) * std::max(0.0, surface_result.tangent_lp));
+    return Clamp01(0.60 * residual_score + 0.25 * planarity_score + 0.15 * tangent_score);
+}
+
+inline bool ComputeHybridPlaneSurfaceResidual(const PointVector &points,
+                                             const PointType &point_world,
+                                             const V3D &point_body,
+                                             const PrimitiveResidualConfig &config,
+                                             PrimitiveResidualResult &result)
+{
+    PrimitiveResidualResult plane_result;
+    PrimitiveResidualResult surface_result;
+    if (!ComputePlaneResidual(points, point_world, point_body, config, plane_result))
+    {
+        return false;
+    }
+    if (!ComputeSurfaceLpResidual(points, point_world, point_body, config, surface_result))
+    {
+        return false;
+    }
+    if (!PassHybridSupportQuality(config, surface_result))
+    {
+        return false;
+    }
+
+    result = plane_result;
+    result.used_surface_model = true;
+    result.world_gradient = plane_result.world_normal;
+    result.world_normal = plane_result.world_normal;
+    result.gating_signed_distance = plane_result.signed_distance;
+    result.signed_distance = plane_result.signed_distance;
+    result.plane_residual = plane_result.residual;
+    result.ekf_residual = plane_result.residual;
+    result.residual = result.ekf_residual;
+    result.surface_normalized_residual = surface_result.residual;
+    result.surface_score = ComputeHybridSurfaceScore(config, surface_result, point_body);
+    result.measurement_weight = ClampRange(config.hybrid_weight_min +
+                                           (config.hybrid_weight_max - config.hybrid_weight_min) * result.surface_score,
+                                           std::min(config.hybrid_weight_min, config.hybrid_weight_max),
+                                           std::max(config.hybrid_weight_min, config.hybrid_weight_max));
+    result.tangent_lp = surface_result.tangent_lp;
+    result.planarity = surface_result.planarity;
+    result.scales = surface_result.scales;
+    result.frame = surface_result.frame;
+    result.center = surface_result.center;
+    result.support_tangent_ratio = surface_result.support_tangent_ratio;
+    result.acceptance_score = plane_result.acceptance_score;
+    return result.world_gradient.allFinite() &&
+           std::isfinite(result.acceptance_score) &&
+           std::isfinite(result.surface_score) &&
+           std::isfinite(result.measurement_weight);
 }
 
 inline bool ComputePrimitiveResidual(const PointVector &points,
@@ -312,6 +456,10 @@ inline bool ComputePrimitiveResidual(const PointVector &points,
                                      const PrimitiveResidualConfig &config,
                                      PrimitiveResidualResult &result)
 {
+    if (config.mode == HYBRID_PLANE_SURFACE)
+    {
+        return ComputeHybridPlaneSurfaceResidual(points, point_world, point_body, config, result);
+    }
     if (config.mode == SURFACE_LP)
     {
         return ComputeSurfaceLpResidual(points, point_world, point_body, config, result);
@@ -325,6 +473,7 @@ inline bool ComputePrimitiveResidual(const PointVector &points,
 
 inline const char *ModeName(const int mode)
 {
+    if (mode == HYBRID_PLANE_SURFACE) return "hybrid_plane_surface";
     if (mode == SURFACE_LP) return "surface_lp";
     if (mode == CENTER_GAUSSIAN) return "center_gaussian";
     return "plane_baseline";

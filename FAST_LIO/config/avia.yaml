@@ -22,7 +22,7 @@ mapping:
     extrinsic_R: [ 1, 0, 0,
                    0, 1, 0,
                    0, 0, 1]
-    primitive_mode: 0
+    primitive_mode: 3
     primitive_neighbor_count: 5
     primitive_min_valid_neighbors: 5
     primitive_max_match_sq: 5.0
@@ -35,6 +35,12 @@ mapping:
     primitive_min_eigenvalue: 0.0001
     primitive_min_normal_scale: 0.05
     primitive_min_tangent_scale: 0.10
+    primitive_hybrid_neighbor_count: 8
+    primitive_hybrid_min_valid_neighbors: 6
+    primitive_hybrid_min_planarity: 0.85
+    primitive_hybrid_min_tangent_ratio: 0.10
+    primitive_hybrid_weight_min: 0.50
+    primitive_hybrid_weight_max: 1.00
     primitive_log_enable: false
     primitive_log_stride: 1
     primitive_log_csv_path: ""

@@ -22,6 +22,8 @@ struct RecentKeyframeState
     int downsampled_point_count = 0;
     int effective_correspondence_count = 0;
     double residual_mean = 0.0;
+    double surface_score_mean = 1.0;
+    double weighted_residual_mean = 0.0;
 };
 
 struct LocalRefinementEvaluation
@@ -30,6 +32,9 @@ struct LocalRefinementEvaluation
     int window_size = 0;
     double window_residual_mean = 0.0;
     double latest_residual_mean = 0.0;
+    double window_surface_score_mean = 1.0;
+    double latest_surface_score_mean = 1.0;
+    double window_weighted_residual_mean = 0.0;
     int window_correspondence_mean = 0;
 };
 
@@ -89,16 +94,23 @@ class LocalRefinementHook
         eval.triggered = true;
         eval.window_size = static_cast<int>(window.size());
         eval.latest_residual_mean = window.back().residual_mean;
+        eval.latest_surface_score_mean = window.back().surface_score_mean;
 
         double residual_sum = 0.0;
+        double surface_score_sum = 0.0;
+        double weighted_residual_sum = 0.0;
         int correspondence_sum = 0;
         for (const auto &frame : window)
         {
             residual_sum += frame.residual_mean;
+            surface_score_sum += frame.surface_score_mean;
+            weighted_residual_sum += frame.weighted_residual_mean;
             correspondence_sum += frame.effective_correspondence_count;
         }
 
         eval.window_residual_mean = residual_sum / window.size();
+        eval.window_surface_score_mean = surface_score_sum / window.size();
+        eval.window_weighted_residual_mean = weighted_residual_sum / window.size();
         eval.window_correspondence_mean = correspondence_sum / static_cast<int>(window.size());
         return eval;
     }

@@ -79,6 +79,7 @@ float res_last[100000] = {0.0};
 float tangent_lp_last[100000] = {0.0};
 float planarity_last[100000] = {0.0};
 float signed_dist_abs_last[100000] = {0.0};
+float surface_score_last[100000] = {0.0};
 float DET_RANGE = 300.0f;
 const float MOV_THRESHOLD = 1.5f;
 double time_diff_lidar_to_imu = 0.0;
@@ -91,6 +92,7 @@ string map_file_path, lid_topic, imu_topic;
 
 double res_mean_last = 0.05, total_residual = 0.0;
 double res_std_last = 0.0, res_max_last = 0.0, tangent_lp_mean_last = 0.0, tangent_lp_max_last = 0.0, planarity_mean_last = 0.0;
+double tangent_lp_std_last = 0.0, planarity_std_last = 0.0, surface_score_mean_last = 0.0, surface_score_std_last = 0.0;
 double signed_dist_abs_mean_last = 0.0, signed_dist_abs_std_last = 0.0, signed_dist_abs_max_last = 0.0;
 double last_timestamp_lidar = 0, last_timestamp_imu = -1.0;
 double gyr_cov = 0.1, acc_cov = 0.1, b_gyr_cov = 0.0001, b_acc_cov = 0.0001;
@@ -660,8 +662,12 @@ void h_share_model(state_ikfom &s, esekfom::dyn_share_datastruct<double> &ekfom_
     res_std_last = 0.0;
     res_max_last = 0.0;
     tangent_lp_mean_last = 0.0;
+    tangent_lp_std_last = 0.0;
     tangent_lp_max_last = 0.0;
     planarity_mean_last = 0.0;
+    planarity_std_last = 0.0;
+    surface_score_mean_last = 0.0;
+    surface_score_std_last = 0.0;
     signed_dist_abs_mean_last = 0.0;
     signed_dist_abs_std_last = 0.0;
     signed_dist_abs_max_last = 0.0;
@@ -715,15 +721,19 @@ void h_share_model(state_ikfom &s, esekfom::dyn_share_datastruct<double> &ekfom_
         {
             if (primitive_result.acceptance_score > primitive_config.acceptance_score_threshold)
             {
+                const double sqrt_weight = std::sqrt(std::max(primitive_result.measurement_weight, 1e-6));
+                const V3D weighted_gradient = sqrt_weight * primitive_result.world_gradient;
+                const double weighted_residual = sqrt_weight * primitive_result.ekf_residual;
                 point_selected_surf[i] = true;
-                normvec->points[i].x = primitive_result.world_gradient(0);
-                normvec->points[i].y = primitive_result.world_gradient(1);
-                normvec->points[i].z = primitive_result.world_gradient(2);
-                normvec->points[i].intensity = primitive_result.residual;
-                res_last[i] = std::fabs(primitive_result.residual);
+                normvec->points[i].x = weighted_gradient(0);
+                normvec->points[i].y = weighted_gradient(1);
+                normvec->points[i].z = weighted_gradient(2);
+                normvec->points[i].intensity = weighted_residual;
+                res_last[i] = std::fabs(primitive_result.ekf_residual);
                 tangent_lp_last[i] = primitive_result.tangent_lp;
                 planarity_last[i] = primitive_result.planarity;
-                signed_dist_abs_last[i] = std::fabs(primitive_result.signed_distance);
+                surface_score_last[i] = primitive_result.surface_score;
+                signed_dist_abs_last[i] = std::fabs(primitive_result.gating_signed_distance);
             }
         }
     }
@@ -740,8 +750,12 @@ void h_share_model(state_ikfom &s, esekfom::dyn_share_datastruct<double> &ekfom_
             res_std_last += res_last[i] * res_last[i];
             res_max_last = std::max(res_max_last, static_cast<double>(res_last[i]));
             tangent_lp_mean_last += tangent_lp_last[i];
+            tangent_lp_std_last += tangent_lp_last[i] * tangent_lp_last[i];
             tangent_lp_max_last = std::max(tangent_lp_max_last, static_cast<double>(tangent_lp_last[i]));
             planarity_mean_last += planarity_last[i];
+            planarity_std_last += planarity_last[i] * planarity_last[i];
+            surface_score_mean_last += surface_score_last[i];
+            surface_score_std_last += surface_score_last[i] * surface_score_last[i];
             signed_dist_abs_mean_last += signed_dist_abs_last[i];
             signed_dist_abs_std_last += signed_dist_abs_last[i] * signed_dist_abs_last[i];
             signed_dist_abs_max_last = std::max(signed_dist_abs_max_last, static_cast<double>(signed_dist_abs_last[i]));
@@ -759,7 +773,11 @@ void h_share_model(state_ikfom &s, esekfom::dyn_share_datastruct<double> &ekfom_
     res_mean_last = total_residual / effct_feat_num;
     res_std_last = std::sqrt(std::max(0.0, res_std_last / effct_feat_num - res_mean_last * res_mean_last));
     tangent_lp_mean_last /= effct_feat_num;
+    tangent_lp_std_last = std::sqrt(std::max(0.0, tangent_lp_std_last / effct_feat_num - tangent_lp_mean_last * tangent_lp_mean_last));
     planarity_mean_last /= effct_feat_num;
+    planarity_std_last = std::sqrt(std::max(0.0, planarity_std_last / effct_feat_num - planarity_mean_last * planarity_mean_last));
+    surface_score_mean_last /= effct_feat_num;
+    surface_score_std_last = std::sqrt(std::max(0.0, surface_score_std_last / effct_feat_num - surface_score_mean_last * surface_score_mean_last));
     signed_dist_abs_mean_last /= effct_feat_num;
     signed_dist_abs_std_last = std::sqrt(std::max(0.0, signed_dist_abs_std_last / effct_feat_num - signed_dist_abs_mean_last * signed_dist_abs_mean_last));
     primitive_valid_count_last = effct_feat_num;
@@ -843,6 +861,12 @@ int main(int argc, char** argv)
     nh.param<double>("mapping/primitive_min_eigenvalue", primitive_config.min_eigenvalue, 1e-4);
     nh.param<double>("mapping/primitive_min_normal_scale", primitive_config.min_normal_scale, 0.05);
     nh.param<double>("mapping/primitive_min_tangent_scale", primitive_config.min_tangent_scale, 0.10);
+    nh.param<int>("mapping/primitive_hybrid_neighbor_count", primitive_config.hybrid_neighbor_count, 8);
+    nh.param<int>("mapping/primitive_hybrid_min_valid_neighbors", primitive_config.hybrid_min_valid_neighbors, 6);
+    nh.param<double>("mapping/primitive_hybrid_min_planarity", primitive_config.hybrid_min_planarity, 0.85);
+    nh.param<double>("mapping/primitive_hybrid_min_tangent_ratio", primitive_config.hybrid_min_tangent_ratio, 0.10);
+    nh.param<double>("mapping/primitive_hybrid_weight_min", primitive_config.hybrid_weight_min, 0.50);
+    nh.param<double>("mapping/primitive_hybrid_weight_max", primitive_config.hybrid_weight_max, 1.00);
     nh.param<bool>("mapping/primitive_log_enable", primitive_log_enable, false);
     nh.param<int>("mapping/primitive_log_stride", primitive_log_stride, 1);
     nh.param<string>("mapping/primitive_log_csv_path", primitive_log_csv_path, string(""));
@@ -866,7 +890,15 @@ int main(int argc, char** argv)
 
     p_pre->lidar_type = lidar_type;
     cout<<"p_pre->lidar_type "<<p_pre->lidar_type<<endl;
-    primitive_config.neighbor_count = std::max(primitive_config.neighbor_count, 5);
+    if (primitive_residual::IsHybridMode(primitive_config.mode))
+    {
+        primitive_config.neighbor_count = std::max(primitive_config.neighbor_count, primitive_config.hybrid_neighbor_count);
+        primitive_config.min_valid_neighbors = std::max(primitive_config.min_valid_neighbors, primitive_config.hybrid_min_valid_neighbors);
+    }
+    else
+    {
+        primitive_config.neighbor_count = std::max(primitive_config.neighbor_count, 5);
+    }
     primitive_config.min_valid_neighbors = std::max(5, std::min(primitive_config.min_valid_neighbors, primitive_config.neighbor_count));
     local_refinement_hook.Configure(local_refinement_config);
     
@@ -918,7 +950,7 @@ int main(int argc, char** argv)
     if (primitive_log_enable)
     {
         primitive_log_stream.open(primitive_log_csv_path, ios::out);
-        primitive_log_stream << "timestamp,mode,feats_down_size,effective_correspondence_count,residual_mean,residual_std,residual_max,signed_dist_abs_mean,signed_dist_abs_std,signed_dist_abs_max,tangent_lp_mean,tangent_lp_max,planarity_mean,acceptance_ratio,match_time,solve_time,kdtree_search_time,kdtree_incremental_time" << endl;
+        primitive_log_stream << "timestamp,mode,feats_down_size,effective_correspondence_count,residual_mean,residual_std,residual_max,signed_dist_abs_mean,signed_dist_abs_std,signed_dist_abs_max,surface_score_mean,surface_score_std,tangent_lp_mean,tangent_lp_std,tangent_lp_max,planarity_mean,planarity_std,acceptance_ratio,match_time,solve_time,kdtree_search_time,kdtree_incremental_time" << endl;
     }
     if (fout_pre && fout_out)
         cout << "~~~~"<<ROOT_DIR<<" file opened" << endl;
@@ -1070,9 +1102,13 @@ int main(int argc, char** argv)
                                      << signed_dist_abs_mean_last << ','
                                      << signed_dist_abs_std_last << ','
                                      << signed_dist_abs_max_last << ','
+                                     << surface_score_mean_last << ','
+                                     << surface_score_std_last << ','
                                      << tangent_lp_mean_last << ','
+                                     << tangent_lp_std_last << ','
                                      << tangent_lp_max_last << ','
                                      << planarity_mean_last << ','
+                                     << planarity_std_last << ','
                                      << primitive_acceptance_ratio_last << ','
                                      << match_time << ','
                                      << solve_time << ','
@@ -1087,6 +1123,8 @@ int main(int argc, char** argv)
             recent_keyframe.downsampled_point_count = feats_down_size;
             recent_keyframe.effective_correspondence_count = effct_feat_num;
             recent_keyframe.residual_mean = signed_dist_abs_mean_last;
+            recent_keyframe.surface_score_mean = surface_score_mean_last;
+            recent_keyframe.weighted_residual_mean = signed_dist_abs_mean_last * (1.0 + std::max(0.0, 1.0 - surface_score_mean_last));
             local_refinement_hook.PushKeyframe(recent_keyframe);
             LocalRefinementEvaluation refinement_eval = local_refinement_hook.ReevaluateRecentWindow();
             LocalRefinementUpdate refinement_update = local_refinement_hook.RefineLatestKeyframePose(recent_keyframe);
@@ -1138,17 +1176,18 @@ int main(int argc, char** argv)
                 s_plot10[time_log_counter] = add_point_size;
                 time_log_counter ++;
                 printf("[ mapping ]: time: IMU + Map + Input Downsample: %0.6f ave match: %0.6f ave solve: %0.6f  ave ICP: %0.6f  map incre: %0.6f ave total: %0.6f icp: %0.6f construct H: %0.6f \n",t1-t0,aver_time_match,aver_time_solve,t3-t1,t5-t3,aver_time_consu,aver_time_icp, aver_time_const_H_time);
-                printf("[ primitive ]: mode=%s residual_mean=%0.6f residual_std=%0.6f residual_max=%0.6f signed_dist_abs_mean=%0.6f corr_ratio=%0.6f tangent_mean=%0.6f planarity_mean=%0.6f\n",
+                printf("[ primitive ]: mode=%s residual_mean=%0.6f residual_std=%0.6f residual_max=%0.6f signed_dist_abs_mean=%0.6f corr_ratio=%0.6f surface_score=%0.6f tangent_mean=%0.6f planarity_mean=%0.6f\n",
                        primitive_residual::ModeName(primitive_config.mode),
                        res_mean_last, res_std_last, res_max_last, signed_dist_abs_mean_last, primitive_acceptance_ratio_last,
-                       tangent_lp_mean_last, planarity_mean_last);
+                       surface_score_mean_last, tangent_lp_mean_last, planarity_mean_last);
                 if (refinement_eval.triggered)
                 {
-                    printf("[ refinement_hook ]: window_size=%d latest_residual_mean=%0.6f window_residual_mean=%0.6f window_corr_mean=%d\n",
+                    printf("[ refinement_hook ]: window_size=%d latest_residual_mean=%0.6f window_residual_mean=%0.6f window_corr_mean=%d window_surface_score=%0.6f\n",
                            refinement_eval.window_size,
                            refinement_eval.latest_residual_mean,
                            refinement_eval.window_residual_mean,
-                           refinement_eval.window_correspondence_mean);
+                           refinement_eval.window_correspondence_mean,
+                           refinement_eval.window_surface_score_mean);
                 }
                 if (refinement_update.applied)
                 {

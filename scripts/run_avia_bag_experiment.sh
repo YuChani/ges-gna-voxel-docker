@@ -1,16 +1,20 @@
 #!/usr/bin/env bash
 set -euo pipefail
 
-MODE="${1:?mode required: baseline|proposed|center}"
+MODE="${1:?mode required: baseline|proposed|center|hybrid}"
 OUT_DIR="${2:?output dir required}"
 BAG_PATH="${3:?bag path required}"
 
-if [[ "$MODE" != "baseline" && "$MODE" != "proposed" && "$MODE" != "center" ]]; then
+if [[ "$MODE" != "baseline" && "$MODE" != "proposed" && "$MODE" != "center" && "$MODE" != "hybrid" ]]; then
   echo "Invalid mode: $MODE" >&2
   exit 1
 fi
 
 mkdir -p "$OUT_DIR"
+PRIMITIVE_LOG_CSV_PATH="$OUT_DIR/primitive_runtime.csv"
+if [[ "$PRIMITIVE_LOG_CSV_PATH" != /* ]]; then
+  PRIMITIVE_LOG_CSV_PATH="$(pwd)/$PRIMITIVE_LOG_CSV_PATH"
+fi
 export ROS_MASTER_URI="${ROS_MASTER_URI:-http://127.0.0.1:11311}"
 export ROS_HOSTNAME="${ROS_HOSTNAME:-127.0.0.1}"
 
@@ -31,6 +35,8 @@ if [[ "$MODE" == "baseline" ]]; then
   PRIMITIVE_MODE=0
 elif [[ "$MODE" == "center" ]]; then
   PRIMITIVE_MODE=2
+elif [[ "$MODE" == "hybrid" ]]; then
+  PRIMITIVE_MODE=3
 else
   PRIMITIVE_MODE=1
 fi
@@ -40,7 +46,7 @@ roscore > "$OUT_DIR/roscore.log" 2>&1 &
 sleep 3
 printf roscore_ready > "$OUT_DIR/02_roscore_ready.txt"
 
-timeout 110s roslaunch fast_lio mapping_avia_param.launch rviz:=false primitive_mode:="$PRIMITIVE_MODE" primitive_log_enable:=true primitive_log_csv_path:="$OUT_DIR/primitive_runtime.csv" pcd_save_en:=false > "$OUT_DIR/launch.log" 2>&1 &
+timeout 110s roslaunch fast_lio mapping_avia_param.launch rviz:=false primitive_mode:="$PRIMITIVE_MODE" primitive_log_enable:=true primitive_log_csv_path:="$PRIMITIVE_LOG_CSV_PATH" pcd_save_en:=false > "$OUT_DIR/launch.log" 2>&1 &
 LAUNCH_PID=$!
 sleep 6
 printf launch_ready > "$OUT_DIR/03_launch_ready.txt"

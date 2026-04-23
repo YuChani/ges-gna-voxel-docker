@@ -1,7 +1,7 @@
 <launch>
 	<arg name="rviz" default="false" />
 	<arg name="config_file" default="$(find fast_lio)/config/avia.yaml" />
-	<arg name="primitive_mode" default="0" />
+	<arg name="primitive_mode" default="3" />
 	<arg name="primitive_log_enable" default="true" />
 	<arg name="primitive_log_csv_path" default="" />
 	<arg name="pcd_save_en" default="false" />
